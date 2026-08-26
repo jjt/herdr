@@ -274,6 +274,8 @@ dark_name = "catppuccin"
 sidebar_bg = "#181825"
 active_row_bg = "#1e1e2e"
 selection_bg = "#313244"
+tab_active_fg = "#cdd6f4"
+tab_active_bg = "#313244"
 panel_bg = "reset"
 accent = "#a6e3a1"
 green = "#a6e3a1"
@@ -283,6 +285,8 @@ yellow = "#f9e2af"
 ```
 
 `sidebar_bg` を使うと、デスクトップのサイドバーだけに背景色を設定できます。省略した場合、サイドバーはホストターミナルの背景を使います。`active_row_bg` は、区切り線やスクロールバートラックに影響を与えず、アクティブな Space とフォーカス中の Agent 行の背景色を変更します。`selection_bg` は、サイドバーの Navigate モードのカーソル行の背景色を変更します。
+
+`tab_active_fg` と `tab_active_bg` は、タブ行でフォーカス中のタブの配色を指定します。未設定の場合、フォーカス中のタブは背景に `accent` を使い、ラベル色は `panel_bg` から導出されます。タブ行をフラットにしたい場合や、独自の背景色でもラベルを読みやすく保ちたい場合に設定してください。
 
 色の値には、hex、名前付きの色、`rgb(r,g,b)`、または `reset`、`default`、`none`、`transparent` のようなリセットエイリアスが使えます。
 

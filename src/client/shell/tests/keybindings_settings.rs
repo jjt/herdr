@@ -1,4 +1,5 @@
 use super::*;
+use ratatui::style::Color;
 
 #[test]
 fn shell_new_controls_use_the_same_client_action_routes_as_keybinds() {
@@ -272,6 +273,55 @@ fn inactive_auto_named_tab_label_does_not_stack_terminal_faint() {
         !cell.modifier.contains(Modifier::DIM),
         "inactive tab label at ({x},{y}) should not stack terminal faint: {cell:?}"
     );
+}
+
+#[test]
+fn focused_tab_uses_custom_active_tab_colors() {
+    let mut projected = snapshot();
+    projected.tabs[0].label = "logs".into();
+    projected.tabs[0].custom_label = true;
+    projected.tabs.push(ClientShellTab {
+        tab_id: "tab_2".into(),
+        workspace_id: "ws_1".into(),
+        number: 2,
+        label: "beta".into(),
+        custom_label: false,
+        zoomed: false,
+        focused: false,
+        agent_status: AgentStatus::Idle,
+    });
+    let mut config = ClientShellConfig::from_config(&Config::default());
+    config.theme_runtime.auto_switch = false;
+    config.palette.tab_active_fg = Some(Color::Rgb(205, 214, 244));
+    config.palette.tab_active_bg = Some(Color::Rgb(49, 50, 68));
+    let inactive_fg = config.palette.overlay0;
+    let inactive_bg = config.palette.surface0;
+    let mut state = ClientShellState::new(config);
+    state.set_snapshot(Box::new(projected));
+    state.set_pane_surface(surface());
+    let frame = state.compose(106, 20).expect("tab bar frame");
+    let buffer = frame.to_ratatui_buffer().expect("tab bar buffer");
+    let tab_cell = |tab_id: &str, label: &str| {
+        let rect = state
+            .hits
+            .tabs
+            .iter()
+            .find(|(_, id)| id == tab_id)
+            .expect("tab hit")
+            .0;
+        let (x, y) = cell_symbol_position(&frame, rect, label);
+        buffer.cell((x, y)).expect("tab cell").clone()
+    };
+
+    let focused = tab_cell("tab_1", "logs");
+    assert_eq!(focused.fg, Color::Rgb(205, 214, 244));
+    assert_eq!(focused.bg, Color::Rgb(49, 50, 68));
+    assert!(focused.modifier.contains(Modifier::BOLD));
+
+    // Inactive tabs keep their own tokens.
+    let inactive = tab_cell("tab_2", "beta");
+    assert_eq!(inactive.fg, inactive_fg);
+    assert_eq!(inactive.bg, inactive_bg);
 }
 
 #[test]

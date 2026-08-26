@@ -274,6 +274,8 @@ dark_name = "catppuccin"
 sidebar_bg = "#181825"
 active_row_bg = "#1e1e2e"
 selection_bg = "#313244"
+tab_active_fg = "#cdd6f4"
+tab_active_bg = "#313244"
 panel_bg = "reset"
 accent = "#a6e3a1"
 green = "#a6e3a1"
@@ -283,6 +285,8 @@ yellow = "#f9e2af"
 ```
 
 `sidebar_bg` 可单独设置桌面侧边栏的背景色。省略时，侧边栏继续使用宿主终端背景。`active_row_bg` 可更改当前 Space 和已聚焦 Agent 行的背景色，而不会影响分隔线或滚动条轨道。`selection_bg` 可更改侧边栏中 Navigate 模式光标行的背景色。
+
+`tab_active_fg` 和 `tab_active_bg` 用于设置标签行中当前标签的配色。未设置时，当前标签使用 `accent` 作为背景，并从 `panel_bg` 推导标签文字颜色；如果希望标签行更扁平，或让标签文字在自定义背景上保持可读，请设置这两个令牌。
 
 颜色值支持十六进制、命名颜色、`rgb(r,g,b)`，以及 `reset`、`default`、`none`、`transparent` 等重置别名。
 
